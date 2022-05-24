@@ -1,6 +1,7 @@
 package com.refanzzzz.mqttclient;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,8 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     MaterialButton btnPublish, btnConnect, btnDisconnect;
-    TextView txtCelcius, txtFahrenheit, txtHumidity;
+    TextView txtCelcius, txtFahrenheit, txtHumidity, txtPublish;
+    EditText etPublish;
     MqttAndroidClient client;
 
     @Override
@@ -58,7 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                txtHumidity.setText(new String(message.getPayload()) + " %");
+                if(topic.equals("sisterkel2/fancontrol/humidity")){
+                    txtHumidity.setText(new String(message.getPayload()) + " %");
+                }else if(topic.equals("sisterkel2/fancontrol/temperature/celcius")){
+                    txtCelcius.setText(new String(message.getPayload()) + " °C");
+                }else if(topic.equals("sisterkel2/fancontrol/temperature/fahrenheit")){
+                    txtFahrenheit.setText(new String(message.getPayload()) + " °F");
+                }else if(topic.equals("sisterkel2/fancontrol/test")){
+                    txtPublish.setText("Test: "+new String(message.getPayload()));
+                }
             }
 
             @Override
@@ -68,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnPublish.setOnClickListener(v -> {
-            String topic = "sisterkel2/fancontrol/humidity";
-            String message = "Hello Refan";
 
             try{
+                String topic = "sisterkel2/fancontrol/test";
+                String message = etPublish.getText().toString();
                 client.publish(topic, message.getBytes(), 0, true);
                 Toast.makeText(MainActivity.this, "Published Message", Toast.LENGTH_SHORT).show();
             }catch(MqttException e){
@@ -126,12 +136,17 @@ public class MainActivity extends AppCompatActivity {
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         txtCelcius = (TextView) findViewById(R.id.txtCelcius);
         txtFahrenheit = (TextView) findViewById(R.id.txtFahrenheit);
+        txtPublish = (TextView) findViewById(R.id.testPublish);
+        etPublish = (EditText) findViewById(R.id.editTestPub);
 
     }
 
     private void setSubscription(){
         try{
+            client.subscribe("sisterkel2/fancontrol/test", 0);
             client.subscribe("sisterkel2/fancontrol/humidity", 0);
+            client.subscribe("sisterkel2/fancontrol/temperature/celcius", 0);
+            client.subscribe("sisterkel2/fancontrol/temperature/fahrenheit", 0);
         }catch(MqttException e){
             e.printStackTrace();
         }

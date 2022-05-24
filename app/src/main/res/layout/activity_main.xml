@@ -164,11 +164,12 @@
         android:padding="15dp">
 
         <EditText
+            android:id="@+id/editTestPub"
             android:layout_width="200dp"
             android:layout_marginRight="10dp"
-            android:inputType="number"
+            android:inputType="text"
             android:textSize="15sp"
-            android:hint="Set integer to control fan"
+            android:hint="Test Publish"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.button.MaterialButton
@@ -180,6 +181,17 @@
             app:cornerRadius="15dp" />
 
     </LinearLayout>
+
+        <TextView
+            android:id="@+id/testPublish"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="Test Publish"/>
 
     <TextView
         android:padding="15dp"
