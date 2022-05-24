@@ -15,11 +15,12 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
     MaterialButton btnPublish, btnConnect, btnDisconnect;
-    TextView txtSubs;
+    TextView txtCelcius, txtFahrenheit, txtHumidity;
     MqttAndroidClient client;
 
     @Override
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                txtSubs.setText(new String(message.getPayload()));
+                txtHumidity.setText(new String(message.getPayload()) + " %");
             }
 
             @Override
@@ -122,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
         btnPublish = (MaterialButton) findViewById(R.id.btnPublish);
         btnConnect = (MaterialButton) findViewById(R.id.btnConnect);
         btnDisconnect = (MaterialButton) findViewById(R.id.btnDisconnect);
-        txtSubs = (TextView) findViewById(R.id.txtSubs);
+        txtHumidity = (TextView) findViewById(R.id.txtHumidity);
+        txtCelcius = (TextView) findViewById(R.id.txtCelcius);
+        txtFahrenheit = (TextView) findViewById(R.id.txtFahrenheit);
+
     }
 
     private void setSubscription(){
